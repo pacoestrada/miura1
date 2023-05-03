@@ -1,0 +1,54 @@
+import requests
+from bs4 import BeautifulSoup
+import tkinter as tk
+from tkinter import ttk
+
+# Función para realizar web scraping en los sitios web especificados
+def get_prediction():
+    enaire_url = "https://www.enaire.es/"
+    pld_space_url = "https://www.pldspace.com/"
+    esa_url = "https://www.esa.int/"
+    space_launch_now_url = "https://spacelaunchnow.me/"
+
+    prediction = ""
+
+    for url in [enaire_url, pld_space_url, esa_url, space_launch_now_url]:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Ajusta la selección según la estructura del sitio web
+        elements = soup.select("div.article")
+        for element in elements:
+            prediction += f"{element.text}\n"
+
+    return prediction
+
+# Función para mostrar una ventana emergente con información
+def show_info(title, message):
+    info_window = tk.Toplevel()
+    info_window.title(title)
+
+    label = tk.Label(info_window, text=message, wraplength=500)
+    label.pack(padx=20, pady=20)
+
+    close_button = ttk.Button(info_window, text="Close", command=info_window.destroy)
+    close_button.pack(pady=(10, 20))
+
+# Función para manejar el evento de clic en el botón de predicción
+def on_predict_button_click():
+    prediction = get_prediction()
+    show_info("Miura-1 Launch Predictions", prediction)
+
+# Crear y configurar la ventana principal
+root = tk.Tk()
+root.title("Miura-1 Launch Predictor")
+root.geometry("400x200")
+
+welcome_label = tk.Label(root, text="Esta aplicación intenta predecir el lanzamiento del cohete Miura-1 en Arenosillo, Huelva.")
+welcome_label.pack(pady=(20, 0))
+
+predict_button = ttk.Button(root, text="Hacer predicción", command=on_predict_button_click)
+predict_button.pack(pady=20)
+
+# Iniciar el bucle principal de eventos de Tkinter
+root.mainloop()
