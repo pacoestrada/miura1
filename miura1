@@ -10,11 +10,12 @@ def get_prediction():
     soup = BeautifulSoup(response.text, "html.parser")
 
     # Extraer información relevante de la página web
-    elements = soup.select("section.section p")
+    sections = soup.find_all("section", {"class": "section"})
     prediction = ""
 
-    for element in elements:
-        prediction += f"{element.text.strip()}\n"
+    for section in sections:
+        for element in section.stripped_strings:
+            prediction += f"{element}\n"
 
     return prediction
 
