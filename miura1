@@ -9,7 +9,7 @@ def get_prediction():
     esa_url = "https://www.esa.int/"
     space_launch_now_url = "https://spacelaunchnow.me/"
 
-    keywords = ['Miura-1', 'Miura', 'PLD Space', 'Arenosillo', 'Huelva']
+    keywords = ['Miura-1', 'Miura', 'PLD Space', 'El Arenosillo', 'Huelva']
     prediction = ""
 
     for url in [pld_space_url, esa_url, space_launch_now_url]:
