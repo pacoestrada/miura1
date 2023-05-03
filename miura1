@@ -5,31 +5,25 @@ from tkinter import ttk
 
 # Función para realizar web scraping en los sitios web especificados
 def get_prediction():
-    enaire_url = "https://www.enaire.es/"
     pld_space_url = "https://www.pldspace.com/"
     esa_url = "https://www.esa.int/"
     space_launch_now_url = "https://spacelaunchnow.me/"
 
+    keywords = ['Miura-1', 'Miura', 'PLD Space', 'Arenosillo', 'Huelva']
     prediction = ""
 
-    for url in [enaire_url, pld_space_url, esa_url, space_launch_now_url]:
+    for url in [pld_space_url, esa_url, space_launch_now_url]:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # Ajusta la selección según la estructura del sitio web
-        if url == enaire_url:
-            elements = soup.select("div.publication-description")
-        elif url == pld_space_url:
-            elements = soup.select("section.hero h1")
-        elif url == esa_url:
-            elements = soup.select("div#block-views-blocknews-homepage-block-5 h2")
-        elif url == space_launch_now_url:
-            elements = soup.select("div.card-content h1")
-        
-        for element in elements:
-            prediction += f"{element.text.strip()}\n"
-
-    return prediction
+        # Buscar palabras clave en el contenido de la página web
+        for keyword in keywords:
+            elements = soup(text=keyword)
+            for element in elements:
+                parent = element.parent
+                prediction += f"{parent.text.strip()}\n"
+    
+    return prediction if prediction else "No se encontró información relevante."
 
 # Función para mostrar una ventana emergente con información
 def show_info(title, message):
@@ -60,6 +54,3 @@ predict_button.pack(pady=20)
 
 # Iniciar el bucle principal de eventos de Tkinter
 root.mainloop()
-
-
-
