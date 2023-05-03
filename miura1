@@ -17,9 +17,17 @@ def get_prediction():
         soup = BeautifulSoup(response.text, "html.parser")
 
         # Ajusta la selección según la estructura del sitio web
-        elements = soup.select("div.article")
+        if url == enaire_url:
+            elements = soup.select("div.publication-description")
+        elif url == pld_space_url:
+            elements = soup.select("section.hero h1")
+        elif url == esa_url:
+            elements = soup.select("div#block-views-blocknews-homepage-block-5 h2")
+        elif url == space_launch_now_url:
+            elements = soup.select("div.card-content h1")
+        
         for element in elements:
-            prediction += f"{element.text}\n"
+            prediction += f"{element.text.strip()}\n"
 
     return prediction
 
@@ -52,3 +60,6 @@ predict_button.pack(pady=20)
 
 # Iniciar el bucle principal de eventos de Tkinter
 root.mainloop()
+
+
+
